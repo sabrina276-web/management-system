@@ -1,0 +1,174 @@
+Build a modern, professional, responsive business website for a poultry farming business called:
+
+KETHIWA POULTRY FARMING
+
+The website is intended to be a polished real-world business website and a client demo. Do not build an admin dashboard or management system at this stage. Focus on presenting the business professionally and making it easy for customers to learn about the chicks and place an inquiry/order.
+
+BUSINESS INFORMATION
+
+Business name:
+KETHIWA POULTRY FARMING
+
+Main slogan:
+"Healthy Chicks, Better Future!"
+
+Main product:
+One-month-old chicks
+
+Chick breeds:
+- Kuroiler F1
+- Sasso F1
+- Kenbro F1
+
+Vaccination:
+The chicks are fully vaccinated according to the recommended vaccination schedule, including protection against:
+- Newcastle disease
+- Gumboro disease
+- Marek disease
+
+KEY BENEFITS TO HIGHLIGHT:
+- Strong and active chicks
+- Good growth and survival
+- Fully vaccinated chicks
+- Affordable prices
+- Delivery available
+- Free management advice
+- Customer support after purchase
+- Quality chicks
+
+CONTACT:
+Phone: 0707 964 182
+
+LOCATIONS:
+
+Main branch:
+Next to Dathiwa Medical Clinic and Zion Mini Supermarket, opposite Nanyuki Township Mixed Day Secondary School.
+
+Second branch:
+Inside the Old Market, Nanyuki.
+
+WEBSITE STRUCTURE
+
+Create a clear navigation bar with:
+- Home
+- About Us
+- Our Chicks
+- Services
+- Why Choose Us
+- Gallery
+- Contact
+
+HOME PAGE:
+Create a strong hero section introducing Kethiwa Poultry Farming with the slogan:
+"Healthy Chicks, Better Future!"
+
+Include:
+- Professional poultry/chick imagery
+- Short introduction
+- "Order Chicks" call-to-action
+- "Call Us" call-to-action
+- Key benefits section
+- Featured chick breeds
+- Vaccination/quality section
+- Short services section
+- Strong contact/order call-to-action near the bottom
+
+ABOUT US:
+Create a professional section explaining Kethiwa Poultry Farming as a poultry business focused on supplying healthy, quality chicks and supporting farmers with management advice.
+
+OUR CHICKS:
+Create attractive cards for:
+1. Kuroiler F1
+2. Sasso F1
+3. Kenbro F1
+
+Each card should have an appropriate poultry image, breed name, short description, and an inquiry/order button.
+
+Do not invent prices. Leave prices out unless they are explicitly provided later.
+
+SERVICES:
+Highlight:
+- Chick sales
+- Delivery
+- Vaccination
+- Free management advice
+- After-purchase customer support
+
+WHY CHOOSE US:
+Create visually appealing benefit cards highlighting:
+- Healthy and active chicks
+- Vaccinated chicks
+- Good growth and survival
+- Affordable prices
+- Reliable support
+- Farmer guidance
+
+GALLERY:
+Create a professional image gallery for poultry/chicks/farming.
+Use appropriate high-quality poultry imagery or clearly marked image placeholders if suitable images are not available.
+Do not use random unrelated stock imagery.
+
+CONTACT:
+Create a strong contact section containing:
+- Phone number: 0707 964 182
+- Main branch location
+- Second branch location
+- Call button
+- WhatsApp/order button
+- Simple inquiry/order form
+
+The order/inquiry form should allow a customer to provide:
+- Name
+- Phone number
+- Chick breed
+- Quantity
+- Preferred location
+- Message
+
+Do not implement a real payment system or backend ordering system yet. The form can initially be a frontend interface/placeholder.
+
+DESIGN DIRECTION
+
+Use the supplied Kethiwa Poultry Farming poster as the branding/content reference.
+
+The website should take inspiration from the poster's:
+- Green
+- Yellow
+- Cream/light backgrounds
+- Small red accents
+
+However, DO NOT simply reproduce the poster.
+
+Create a clean, modern, premium-looking website with:
+- Strong typography
+- Rounded cards
+- Professional spacing
+- High-quality poultry imagery
+- Subtle shadows
+- Clear visual hierarchy
+- Attractive buttons
+- Modern responsive navigation
+- Professional footer
+
+The website should feel trustworthy, clean, agricultural, and welcoming.
+
+TECHNICAL REQUIREMENTS
+
+- Use a modern React-based frontend.
+- Keep the project structure clean and maintainable.
+- Make the website fully responsive for desktop, tablet, and mobile.
+- Use reusable components where appropriate.
+- Ensure navigation works correctly.
+- Ensure buttons and links are visually clear.
+- Avoid unnecessary animations that make the site feel slow.
+- Use accessible color contrast.
+- Do not create an admin dashboard.
+- Do not add fake customer reviews, fake statistics, fake prices, fake certifications, or information that was not provided.
+- Do not invent additional branches or contact numbers.
+- Use placeholder content where information has not yet been provided.
+- Make the initial result polished enough to serve as a professional client demo.
+
+IMPORTANT:
+First create the complete initial website layout and structure.
+Do not overcomplicate the backend.
+Focus on creating a beautiful, professional frontend that we can review and improve in later phases.

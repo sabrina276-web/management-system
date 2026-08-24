@@ -1,0 +1,1068 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: Dental Clinic Management System API
+
+servers:
+  - url: /api
+    description: Base API path
+
+tags:
+  - name: health
+    description: Health operations
+  - name: patients
+    description: Patient management
+  - name: appointments
+    description: Appointment scheduling
+  - name: billing
+    description: Billing and invoices
+  - name: inventory
+    description: Inventory management
+  - name: employees
+    description: Employee management
+  - name: dashboard
+    description: Dashboard operations
+
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  # ── Patients ──────────────────────────────────────────────────────────────
+  /patients:
+    get:
+      operationId: listPatients
+      tags: [patients]
+      summary: List all patients
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Search by name, email, or phone
+      responses:
+        "200":
+          description: List of patients
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Patient"
+    post:
+      operationId: createPatient
+      tags: [patients]
+      summary: Create a new patient
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatientInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Patient"
+
+  /patients/{id}:
+    get:
+      operationId: getPatient
+      tags: [patients]
+      summary: Get a patient by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Patient found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Patient"
+        "404":
+          description: Not found
+    patch:
+      operationId: updatePatient
+      tags: [patients]
+      summary: Update a patient
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatientUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Patient"
+        "404":
+          description: Not found
+      delete:
+                operationId: deletePatient
+                tags: [patients]
+                summary: Delete a patient
+                parameters:
+                  - name: id
+                    in: path
+                    required: true
+                    schema:
+                      type: integer
+                responses:
+                  "204":
+                    description: Deleted
+                  "404":
+                    description: Not found
+
+  /patients/{id}/appointments:
+    get:
+      operationId: listPatientAppointments
+      tags: [patients]
+      summary: List appointments for a patient
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of appointments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Appointment"
+
+  /patients/{id}/bills:
+    get:
+      operationId: listPatientBills
+      tags: [patients]
+      summary: List bills for a patient
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of bills
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Bill"
+
+  # ── Appointments ──────────────────────────────────────────────────────────
+  /appointments:
+    get:
+      operationId: listAppointments
+      tags: [appointments]
+      summary: List appointments
+      parameters:
+        - name: date
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Filter by specific date (YYYY-MM-DD)
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [scheduled, confirmed, completed, cancelled, no_show]
+      responses:
+        "200":
+          description: List of appointments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Appointment"
+    post:
+      operationId: createAppointment
+      tags: [appointments]
+      summary: Create an appointment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AppointmentInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Appointment"
+
+  /appointments/today:
+    get:
+      operationId: listTodayAppointments
+      tags: [appointments]
+      summary: List today's appointments
+      responses:
+        "200":
+          description: Today's appointments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Appointment"
+
+  /appointments/{id}:
+    get:
+      operationId: getAppointment
+      tags: [appointments]
+      summary: Get an appointment by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Appointment found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Appointment"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateAppointment
+      tags: [appointments]
+      summary: Update an appointment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AppointmentUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Appointment"
+        "404":
+          description: Not found
+    delete:
+      operationId: deleteAppointment
+      tags: [appointments]
+      summary: Delete an appointment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+
+  # ── Billing ───────────────────────────────────────────────────────────────
+  /bills:
+    get:
+      operationId: listBills
+      tags: [billing]
+      summary: List bills
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, partial, paid, overdue]
+      responses:
+        "200":
+          description: List of bills
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Bill"
+    post:
+      operationId: createBill
+      tags: [billing]
+      summary: Create a bill
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BillInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bill"
+
+  /bills/outstanding:
+    get:
+      operationId: listOutstandingBills
+      tags: [billing]
+      summary: List all outstanding (unpaid/partial) bills
+      responses:
+        "200":
+          description: Outstanding bills
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Bill"
+
+  /bills/{id}:
+    get:
+      operationId: getBill
+      tags: [billing]
+      summary: Get a bill by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Bill found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bill"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateBill
+      tags: [billing]
+      summary: Update a bill (e.g. record payment, change status)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BillUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bill"
+        "404":
+          description: Not found
+    delete:
+      operationId: deleteBill
+      tags: [billing]
+      summary: Delete a bill
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ── Inventory ─────────────────────────────────────────────────────────────
+        /inventory/{id}:
+          get:
+            operationId: getInventoryItem
+      tags: [inventory]
+      summary: List inventory items
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of inventory items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/InventoryItem"
+    post:
+      operationId: createInventoryItem
+      tags: [inventory]
+      summary: Create an inventory item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InventoryItemInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InventoryItem"
+
+  /inventory/low-stock:
+    get:
+      operationId: listLowStockItems
+      tags: [inventory]
+      summary: List items at or below reorder level
+      responses:
+        "200":
+          description: Low stock items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/InventoryItem"
+
+           /inventory/{id}:
+             get:
+               operationId: getInventoryItem
+               tags: [inventory]
+               summary: Get an inventory item by ID
+               parameters:
+                 - name: id
+                   in: path
+                   required: true
+                   schema:
+                     type: integer
+               responses:
+                 "200":
+                   description: Item found
+                   content:
+                     application/json:
+                       schema:
+                         $ref: "#/components/schemas/InventoryItem"
+                 "404":
+                   description: Not found
+
+             patch:
+               operationId: updateInventoryItem
+               tags: [inventory]
+               summary: Update an inventory item
+               parameters:
+                 - name: id
+                   in: path
+                   required: true
+                   schema:
+                     type: integer
+               requestBody:
+                 required: true
+                 content:
+                   application/json:
+                     schema:
+                       $ref: "#/components/schemas/InventoryItemUpdate"
+               responses:
+                 "200":
+                   description: Updated
+                   content:
+                     application/json:
+                       schema:
+                         $ref: "#/components/schemas/InventoryItem"
+                 "404":
+                   description: Not found
+
+             delete:
+               operationId: deleteInventoryItem
+               tags: [inventory]
+               summary: Delete an inventory item
+               parameters:
+                 - name: id
+                   in: path
+                   required: true
+                   schema:
+                     type: integer
+               responses:
+                 "204":
+                   description: Deleted
+
+                                                                              # ── Employees ─────────────────────────────────────────────────────────────
+           /employees:
+        get:
+          operationId: listEmployees
+          tags: [employees]
+          summary: List employees
+          responses:
+            "200":
+              description: List of employees
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Employee"
+
+        post:
+          operationId: createEmployee
+          tags: [employees]
+          summary: Create an employee
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/EmployeeInput"
+          responses:
+            "201":
+              description: Created
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Employee"
+
+      /employees/{id}:
+        get:
+          operationId: getEmployee
+          tags: [employees]
+          summary: Get employee by ID
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: integer
+          responses:
+            "200":
+              description: Employee found
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Employee"
+            "404":
+              description: Not found
+
+        patch:
+          operationId: updateEmployee
+          tags: [employees]
+          summary: Update an employee
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: integer
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/EmployeeUpdate"
+          responses:
+            "200":
+              description: Updated
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Employee"
+
+        delete:
+          operationId: deleteEmployee
+          tags: [employees]
+          summary: Delete an employee
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: integer
+          responses:
+            "204":
+              description: Deleted
+
+  
+  # ── Dashboard ─────────────────────────────────────────────────────────────
+  /dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [dashboard]
+      summary: Get dashboard summary stats
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+
+    # ── Patient ──────────────────────────────────────────────────────────────
+    Patient:
+      type: object
+      required: [id, firstName, lastName, email, phone, dateOfBirth, createdAt, updatedAt]
+      properties:
+        id:
+          type: integer
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        dateOfBirth:
+          type: string
+          format: date
+        address:
+          type: ["string", "null"]
+        insuranceProvider:
+          type: ["string", "null"]
+        insuranceNumber:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    PatientInput:
+      type: object
+      required: [firstName, lastName, email, phone, dateOfBirth]
+      properties:
+        firstName:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+        email:
+          type: string
+        phone:
+          type: string
+        dateOfBirth:
+          type: string
+          format: date
+        address:
+          type: string
+        insuranceProvider:
+          type: string
+        insuranceNumber:
+          type: string
+        notes:
+          type: string
+
+    PatientUpdate:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        dateOfBirth:
+          type: string
+          format: date
+        address:
+          type: ["string", "null"]
+        insuranceProvider:
+          type: ["string", "null"]
+        insuranceNumber:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+
+    # ── Appointment ───────────────────────────────────────────────────────────
+    Appointment:
+      type: object
+      required: [id, patientId, patientName, dentistName, appointmentDate, appointmentTime, durationMinutes, type, status, createdAt, updatedAt]
+      properties:
+        id:
+          type: integer
+        patientId:
+          type: integer
+        patientName:
+          type: string
+        dentistName:
+          type: string
+        appointmentDate:
+          type: string
+          format: date
+        appointmentTime:
+          type: string
+          description: "HH:MM format"
+        durationMinutes:
+          type: integer
+        type:
+          type: string
+          enum: [checkup, cleaning, filling, extraction, root_canal, crown, whitening, orthodontics, xray, consultation, other]
+        status:
+          type: string
+          enum: [scheduled, confirmed, completed, cancelled, no_show]
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    AppointmentInput:
+      type: object
+      required: [patientId, dentistName, appointmentDate, appointmentTime, durationMinutes, type]
+      properties:
+        patientId:
+          type: integer
+        dentistName:
+          type: string
+          minLength: 1
+        appointmentDate:
+          type: string
+          format: date
+        appointmentTime:
+          type: string
+        durationMinutes:
+          type: integer
+        type:
+          type: string
+          enum: [checkup, cleaning, filling, extraction, root_canal, crown, whitening, orthodontics, xray, consultation, other]
+        status:
+          type: string
+          enum: [scheduled, confirmed, completed, cancelled, no_show]
+        notes:
+          type: string
+
+    AppointmentUpdate:
+      type: object
+      properties:
+        dentistName:
+          type: string
+        appointmentDate:
+          type: string
+          format: date
+        appointmentTime:
+          type: string
+        durationMinutes:
+          type: integer
+        type:
+          type: string
+          enum: [checkup, cleaning, filling, extraction, root_canal, crown, whitening, orthodontics, xray, consultation, other]
+        status:
+          type: string
+          enum: [scheduled, confirmed, completed, cancelled, no_show]
+        notes:
+          type: ["string", "null"]
+
+    # ── Bill ─────────────────────────────────────────────────────────────────
+    Bill:
+      type: object
+      required: [id, patientId, patientName, totalAmount, amountPaid, status, dueDate, items, createdAt, updatedAt]
+      properties:
+        id:
+          type: integer
+        patientId:
+          type: integer
+        patientName:
+          type: string
+        appointmentId:
+          type: ["integer", "null"]
+        totalAmount:
+          type: number
+        amountPaid:
+          type: number
+        status:
+          type: string
+          enum: [pending, partial, paid, overdue]
+        dueDate:
+          type: string
+          format: date
+        notes:
+          type: ["string", "null"]
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/BillLineItem"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    BillLineItem:
+      type: object
+      required: [description, quantity, unitPrice]
+      properties:
+        description:
+          type: string
+        quantity:
+          type: integer
+        unitPrice:
+          type: number
+
+    BillInput:
+      type: object
+      required: [patientId, totalAmount, dueDate, items]
+      properties:
+        patientId:
+          type: integer
+        appointmentId:
+          type: integer
+        totalAmount:
+          type: number
+        amountPaid:
+          type: number
+        status:
+          type: string
+          enum: [pending, partial, paid, overdue]
+        dueDate:
+          type: string
+          format: date
+        notes:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/BillLineItem"
+
+    BillUpdate:
+      type: object
+      properties:
+        totalAmount:
+          type: number
+        amountPaid:
+          type: number
+        status:
+          type: string
+          enum: [pending, partial, paid, overdue]
+        dueDate:
+          type: string
+          format: date
+        notes:
+          type: ["string", "null"]
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/BillLineItem"
+
+    # ── Inventory ─────────────────────────────────────────────────────────────
+    InventoryItem:
+      type: object
+      required: [id, name, category, quantity, unit, reorderLevel, costPerUnit, createdAt, updatedAt]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        category:
+          type: string
+        quantity:
+          type: integer
+        unit:
+          type: string
+        reorderLevel:
+          type: integer
+        costPerUnit:
+          type: number
+        supplier:
+          type: ["string", "null"]
+        lastRestockedAt:
+          type: ["string", "null"]
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    InventoryItemInput:
+      type: object
+      required: [name, category, quantity, unit, reorderLevel, costPerUnit]
+      properties:
+        name:
+          type: string
+          minLength: 1
+        category:
+          type: string
+        quantity:
+          type: integer
+        unit:
+          type: string
+        reorderLevel:
+          type: integer
+        costPerUnit:
+          type: number
+        supplier:
+          type: string
+
+    InventoryItemUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        category:
+          type: string
+        quantity:
+          type: integer
+        unit:
+          type: string
+        reorderLevel:
+          type: integer
+        costPerUnit:
+          type: number
+        supplier:
+          type: ["string", "null"]
+        lastRestockedAt:
+          type: ["string", "null"]
+          format: date-time
+
+          # ── Employee ────────────────────────────────────────────────────────────
+          Employee:
+            type: object
+            required: [id, fullName, role, email, phone, status, createdAt, updatedAt]
+            properties:
+              id:
+                type: integer
+              fullName:
+                type: string
+              role:
+                type: string
+              email:
+                type: string
+              phone:
+                type: string
+              status:
+                type: string
+              createdAt:
+                type: string
+                format: date-time
+              updatedAt:
+                type: string
+                format: date-time
+
+          EmployeeInput:
+            type: object
+            required: [fullName, role, email, phone]
+            properties:
+              fullName:
+                type: string
+              role:
+                type: string
+              email:
+                type: string
+              phone:
+                type: string
+              status:
+                type: string
+
+          EmployeeUpdate:
+            type: object
+            properties:
+              fullName:
+                type: string
+              role:
+                type: string
+              email:
+                type: string
+              phone:
+                type: string
+              status:
+                type: string
+
+    # ── Dashboard ─────────────────────────────────────────────────────────────
+    DashboardSummary:
+      type: object
+      required: [totalPatients, todayAppointments, totalAppointmentsThisMonth, outstandingRevenue, totalRevenue, appointmentsByStatus, upcomingAppointments, lowStockCount, recentPatients]
+      properties:
+        totalPatients:
+          type: integer
+        todayAppointments:
+          type: integer
+        totalAppointmentsThisMonth:
+          type: integer
+        outstandingRevenue:
+          type: number
+        totalRevenue:
+          type: number
+        appointmentsByStatus:
+          type: object
+          properties:
+            scheduled:
+              type: integer
+            confirmed:
+              type: integer
+            completed:
+              type: integer
+            cancelled:
+              type: integer
+            no_show:
+              type: integer
+          required: [scheduled, confirmed, completed, cancelled, no_show]
+        upcomingAppointments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Appointment"
+        lowStockCount:
+          type: integer
+        recentPatients:
+          type: array
+          items:
+            $ref: "#/components/schemas/Patient"
